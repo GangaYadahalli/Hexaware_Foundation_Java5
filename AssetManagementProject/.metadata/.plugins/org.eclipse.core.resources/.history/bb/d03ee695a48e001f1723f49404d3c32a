@@ -1,0 +1,81 @@
+package com.hexaware.ams.test;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import com.hexaware.ams.entity.*;
+import com.hexaware.ams.service.AssetManagementServiceImpl;
+import com.hexaware.ams.service.IAssetManagementService;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class AssetManagementServiceImplTest {
+	static IAssetManagementService service;
+	@BeforeAll  
+	public static void beforeAll() {
+		
+		service = new AssetManagementServiceImpl();
+		
+	}
+	
+	@Test
+	void testAddAsset() {
+		
+		Assets asset = new Assets(20,"chair","Furinture",1020,null,"Office","inuse",102);
+		
+		boolean count = service.addAsset(asset);
+		
+		assertTrue(count, "The asset should be added successfully");
+		
+	}
+//	@Test
+//	void testPerformMaintenance()
+//	{
+//     LocalDate localDate = LocalDate.of(2023, 3, 10); 
+//
+//       java.util.Date hardCodedDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//
+//		
+//		List<MaintenanceRecords>  list =	service.performMaintenance(1,(Date) hardCodedDate ,"chairrepair", 5000.0);
+//		
+//		 assertEquals(1, list.size(), "The asset maintenance list should contain exactly one record");
+//	}
+//	 @Test
+//	    void testReserveAsset() {
+//	        // Arrange: Define the input parameters for reservation
+//	        int assetId = 101;
+//	        int employeeId = 1001;
+//	        
+//	        // Define reservation dates
+//	        LocalDate localStartDate = LocalDate.of(2023, 10, 18);
+//	        LocalDate localEndDate = LocalDate.of(2023, 10, 25);
+//	        Date startDate = (Date) Date.from(localStartDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//	        Date endDate = (Date) Date.from(localEndDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//	        Date reservationDate = (Date) Date.from(localEndDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//	        // Act: Call the method to reserve the asset
+//	        List<Reservations> isReserved = service.reserveAsset(assetId, employeeId,reservationDate, startDate, endDate);
+//
+//	        // Assert: Check if the asset reservation was successful
+//	        assertFalse(isReserved, "Asset should be reserved successfully");
+//	    }
+//
+//	private void assertFalse(List<Reservations> isReserved, String string) {
+//	// TODO Auto-generated method stub
+//	
+//}
+
+	
+	}
+
+
+
+

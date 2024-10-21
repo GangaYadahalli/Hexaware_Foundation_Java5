@@ -1,0 +1,29 @@
+package com.hexaware.ams.dao;
+
+import java.sql.Date;
+import java.util.List;
+
+import com.hexaware.ams.entity.Assets;
+import com.hexaware.ams.entity.MaintenanceRecords;
+
+public interface IAssetMangementDao {
+	
+    boolean addAsset(Assets asset);
+	
+	boolean updateAsset(Assets asset);
+	
+	 boolean deleteAsset(int assetId);
+	 
+	 boolean allocateAsset(int assetId, int employeeId, Date allocationDate);
+	 
+	 boolean deallocateAsset(int assetId, int employeeId, Date returnDate);
+	 
+	 boolean performMaintenance(int maintenanceId,int assetId, Date maintenanceDate,String description, double cost);
+	 
+	
+
+	 boolean reserveAsset(int assetId, int employeeId, String reservationDate, String startDate, String endDate);
+
+	 boolean withdrawReservation(int reservationId);
+
+}

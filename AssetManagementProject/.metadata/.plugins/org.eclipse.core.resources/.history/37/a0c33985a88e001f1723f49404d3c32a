@@ -1,0 +1,66 @@
+package com.hexaware.ams.test;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import com.hexaware.ams.entity.*;
+import com.hexaware.ams.service.AssetManagementServiceImpl;
+import com.hexaware.ams.service.IAssetManagementService;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class AssetManagementServiceImplTest {
+	static IAssetManagementService service;
+	@BeforeAll  
+	public static void beforeAll() {
+		
+		service = new AssetManagementServiceImpl();
+		
+	}
+	
+//	@Test
+//	void testAddAsset() {
+//		LocalDate localDate = LocalDate.of(2023, 3, 10);
+//
+//	    java.util.Date hardCodedDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//
+//	   
+//	    Assets asset = new Assets(24, "chair", "Furniture", 1024,Date(hardCodedDate), "Office", "in use", 102);
+//
+//	    boolean count = service.addAsset(asset);
+//
+//	    
+//	    assertTrue(count, "The asset should be added successfully");
+//
+//		
+//	}
+	private Date Date(java.util.Date hardCodedDate) {
+		
+		return null;
+	}
+
+	@Test
+	void testPerformMaintenance()
+	{
+		//MaintenanceRecords records=new MaintenanceRecords(2,2023-10-11,null, "DeskRepair",3000.0);
+		LocalDate localDate = LocalDate.of(2024, 10, 10);
+		java.util.Date hardCodedDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		boolean count=service.performMaintenance(2,Date(hardCodedDate), "DeskRepair",3000.0);
+		
+		assertTrue(count,"The maintenanceRecords should be added successfully");
+	}
+
+	}
+
+
+
+

@@ -1,0 +1,207 @@
+package com.hexaware.ams.dao;
+
+import java.sql.Connection;
+
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hexaware.ams.entity.AssetAllocation;
+import com.hexaware.ams.entity.Assets;
+import com.hexaware.ams.entity.MaintenanceRecords;
+import com.mysql.cj.xdevapi.Statement;
+
+public class AssetMangementDaoImpl implements IAssetMangementDao{
+	
+    Connection conn;
+	
+	public AssetMangementDaoImpl()
+	{
+		conn=DBUtil.getDBConnection();
+	}
+	
+
+	@Override
+	public boolean addAsset(Assets asset) {
+		int  count=0;
+		String insert="insert into Assets (assetId, name, type, serialNumber,purchaseDate, location ,status,ownerId) values(?,?,?,?,?,?,?,?)";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(insert);
+			
+			pstmt.setInt(1,asset.getAssetId());
+			pstmt.setString(2, asset.getName());
+			pstmt.setString(3, asset.getType());
+			pstmt.setInt(4,asset.getSerialNumber());
+			pstmt.setDate(5, asset.getPurchaseDate());
+			pstmt.setString(6,asset.getLocation());
+			pstmt.setString(7,asset.getStatus());
+			pstmt.setInt(8, asset.getOwnerId());
+			
+			
+			count=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean updateAsset(Assets asset) {
+		int count=0;
+		String update="update Assets set name=? where assetId=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(update);
+			pstmt.setString(1, asset.getName());
+			pstmt.setInt(2,asset.getAssetId());
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean deleteAsset(int assetId) {
+		
+		int count=0;
+		String delete="delete from Assets where assetId=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(delete);
+			
+			pstmt.setInt(1,assetId);
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+		
+	}
+
+	@Override
+	public boolean allocateAsset(int assetId, int employeeId, Date allocationDate) {
+		
+		int  count=0;
+		String  allocate="insert into AssetAllocation (assetId,employeeId,allocationDate) values(?,?,?)";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(allocate);
+			
+			pstmt.setInt(1,assetId);
+			pstmt.setInt(2, employeeId);
+			pstmt.setDate(3, allocationDate);
+		
+			
+			
+			count=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean deallocateAsset(int assetId, int employeeId, Date returnDate) {
+		
+		int count=0;
+		String deallocate="delete from AssetAllocation where returnDate=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(deallocate);
+			
+			pstmt.setDate(1,returnDate);
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean performMaintenance(int maintenanceId,int assetId, Date maintenanceDate,String description, double cost) {
+		
+		//int count=0;
+		List<MaintenanceRecords>  list = new ArrayList<MaintenanceRecords>();
+		
+		String select = "select maintenanceId, assetId,maintenanceDate,description,cost from MaintenanceRecords "; // static query
+		
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(select);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int maintenanaceId1=rs.getInt("maintenanceId");
+				int assetId1 = rs.getInt("assetId");
+				Date maintenanceDate1=rs.getDate("maintenanceDate");
+				String description1 = rs.getString("description");
+				double cost1 = rs.getDouble("cost");
+				System.out.println(maintenanaceId1+" "+assetId1+ "  " + maintenanceDate1+ "  " + description1+" "+cost1+" ");
+				MaintenanceRecords  records = new MaintenanceRecords(maintenanaceId1,assetId1,maintenanceDate1,description1,cost1);
+
+				list.add(records);
+				
+			}
+		}
+
+			
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		 
+		return false;
+	}
+		
+			
+
+	@Override
+	public boolean reserveAsset(int assetId, int employeeId, String reservationDate, String startDate, String endDate) {
+		
+		return false;
+	}
+
+	@Override
+	public boolean withdrawReservation(int reservationId) {
+		int count=0;
+		String withdraw="delete from reservations where reservationId=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(withdraw);
+			
+			pstmt.setInt(1,reservationId);
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+		
+		
+	}
+
+
+//	@Override
+//	public List<MaintenanceRecords> performMaintenance() {
+//		
+//		return null;
+//	}
+
+}

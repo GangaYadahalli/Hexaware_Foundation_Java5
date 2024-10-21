@@ -1,0 +1,329 @@
+package com.hexaware.ams.ui;
+
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Scanner;
+import com.hexaware.ams.service.IAssetMangementService;
+import com.hexaware.ams.service.AssetManagementServiceImpl;
+import com.hexaware.ams.entity.AssetAllocation;
+import com.hexaware.ams.entity.Assets;
+import com.hexaware.ams.entity.MaintenanceRecords;
+import com.hexaware.ams.entity.Reservations;
+
+
+public class AssetManagementApp {
+	
+	static Scanner scanner = new Scanner(System.in);
+
+	public static void main(String[] args) {
+
+		boolean flag = true;
+		
+		IAssetMangementService service = new AssetManagementServiceImpl();
+		
+		while (flag) {
+
+			System.out.println("*****Welcome to digital asset mangement*****");
+			System.out.println("1.ADD ASSET");
+			System.out.println("2.Update Asset");
+			System.out.println("3.Delete Asset");
+			System.out.println("4.Allocate Asset");
+			System.out.println("5.Deallocate Asset");
+			System.out.println("6.Perform Maintenance");
+			System.out.println("7.Reserve Asset");
+			System.out.println("8.Withdraw Reservation");
+			System.out.println("0.EXIT");
+
+			int choice = scanner.nextInt();
+			switch(choice)
+			{
+			case 1:
+				Assets asset=readAssetData();
+				
+				boolean isValid = AssetManagementServiceImpl.validateAsset(asset);
+
+				if (isValid) {
+					boolean success = service.addAsset(asset);
+					int count = success ? 1 : 0;
+					if (count > 0) {
+
+						System.out.println("Asset added successfully..");
+						//System.out.println(count);
+					}
+
+					else {
+
+						System.err.println("Asset Adding  Failed...");
+
+					}
+
+				} else {
+
+					System.err.println("Invalid Employee Data");
+
+				}
+				break;
+			case 2:
+				Assets assetUpdate=updateAssetData();
+				boolean isValid1 = AssetManagementServiceImpl.validateAssetUpdate(assetUpdate);
+				if (isValid1) {
+					boolean success = service.updateAsset(assetUpdate);
+					int count = success ? 1 : 0;
+					if (count > 0) {
+
+						System.out.println("update successfully..");
+						//System.out.println(count);
+					}
+
+					else {
+
+						System.err.println("update  Failed...");
+
+					}
+
+				} else {
+
+					System.err.println("Invalid  Data");
+
+				}
+				
+				break;
+			case 3:
+				Assets assetDelete=deleteAssetData();
+				boolean isValid2 = AssetManagementServiceImpl.validateAssetDelete(assetDelete);
+				if (isValid2) {
+					boolean success = service.deleteAsset(assetDelete.getAssetId());
+					int count = success ? 1 : 0;
+					if (count > 0) {
+
+						System.out.println("Delete successfully..");
+						//System.out.println(count);
+					}
+
+					else {
+
+						System.err.println("Delete  Failed...");
+
+					}
+
+				} else {
+
+					System.err.println("Invalid  Data");
+
+				}
+				break;
+			case 4:
+				AssetAllocation assetAdd=addAssetData();
+				boolean isValid3 = AssetManagementServiceImpl.validateAssetAllocation(assetAdd);
+				if (isValid3) {
+					boolean success = service.allocateAsset(assetAdd.getAssetId(),assetAdd.getEmployeeId(),assetAdd.getAllocationDate());
+					int count = success ? 1 : 0;
+					if (count > 0) {
+
+						System.out.println("Allocate successfully..");
+						//System.out.println(count);
+					}
+
+					else {
+
+						System.err.println("Allocation addition  Failed...");
+
+					}
+
+				} else {
+
+					System.err.println("Invalid  Data");
+
+				}
+				
+				
+				
+				break;
+			case 5:
+				AssetAllocation assetDeallocate=deallocateAssetData();
+//				boolean count = AssetManagementServiceImpl.
+				
+					boolean success1 = service.deallocateAsset(assetDeallocate.getAssetId(),assetDeallocate.getEmployeeId(),assetDeallocate.getReturnDate());
+					int count1 = success1 ? 1 : 0;
+					if (count1> 0) {
+
+						System.out.println("Deallocate successfully..");
+						//System.out.println(count);
+					}
+
+					else {
+
+						System.err.println("Deallocation  Failed...");
+
+					}
+
+				
+				break;
+			case 6:
+				System.out.println("Enter asset Id");
+				int assetId=scanner.nextInt();
+				List<MaintenanceRecords> listRecords = service.performMaintenance(assetId, null, null, 0.0);
+
+				for (MaintenanceRecords records :listRecords ) {
+
+					System.out.println(records);}
+				break;
+			case 7:
+//				System.out.println("Enter employee Id");
+//				int employeeId=scanner.nextInt();
+//				List<Reservations> listReservations = service.reserveAsset(assetId,employeeId,reservationDate,startDate,endDate);
+//
+//				for (Reservations records :listReservations ) {
+//
+//					System.out.println(records);}
+//					break;
+				
+			case 8:
+				Reservations reservationWithdraw=withdrawReservationData();
+				boolean isValid4 = AssetManagementServiceImpl.validateWithdrawReservation(reservationWithdraw);
+				if (isValid4) {
+					boolean success2= service.withdrawReservation(reservationWithdraw.getReservationId());
+					int count = success2 ? 1 : 0;
+					if (count > 0) {
+
+						System.out.println("Withdraw successfully..");
+					}
+
+					else {
+
+						System.err.println("Withdraw  Failed...");
+
+					}
+
+				} else {
+
+					System.err.println("Invalid  Data");
+
+				}
+				break;
+				
+			case 0:
+				flag =false;
+				System.out.println("Thank you");
+			default:
+				break;
+				
+				
+			}
+	}
+
+}
+	public static Assets readAssetData(){
+		Assets  asset=new Assets();
+		
+		System.out.println("Enter AssetID=");
+		asset.setAssetId(scanner.nextInt());
+		System.out.println("Enter  Name=");
+		asset.setName(scanner.next());
+		System.out.println("Enter Type=");
+		asset.setType(scanner.next());
+		System.out.println("Enter SerialNumber=");
+		asset.setSerialNumber(scanner.nextInt());
+		System.out.println("Enter date =");
+		
+		String inputDate = scanner.next(); 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            java.util.Date parsedDate = formatter.parse(inputDate);
+            
+            asset.setPurchaseDate(new Date(parsedDate.getTime()));
+            System.out.println("You entered the date: " + asset.getPurchaseDate());
+        } 
+        catch (ParseException e) {
+            System.err.println("Invalid date format. Please enter the date in the format yyyy-MM-dd.");
+            return null; 
+        }
+		System.out.println("Enter Location=");
+		asset.setLocation(scanner.next());
+		System.out.println("Enter Status=");
+		asset.setStatus(scanner.next());
+		System.out.println("Enter Owner Id=");
+		asset.setOwnerId(scanner.nextInt());
+			
+		return asset;
+	}
+	public static Assets updateAssetData(){
+		Assets  asset=new Assets();
+		System.out.println("Enter  Name=");
+		asset.setName(scanner.next());
+		System.out.println("Enter AssetID=");
+		asset.setAssetId(scanner.nextInt());
+		
+		return asset;
+		
+	}
+	public static Assets deleteAssetData(){
+		Assets  asset=new Assets();
+		System.out.println("Enter AssetID=");
+		asset.setAssetId(scanner.nextInt());
+		
+		return asset;
+	}
+	public static AssetAllocation addAssetData(){
+		AssetAllocation  allocate=new AssetAllocation();
+		System.out.println("Enter AssetID=");
+		allocate.setAssetId(scanner.nextInt());
+		System.out.println("Enter EmployeeID=");
+		allocate.setEmployeeId(scanner.nextInt());
+		System.out.println("Enter Allocation Date=");
+		String inputDate = scanner.next(); 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            java.util.Date parsedDate = formatter.parse(inputDate);
+            
+            allocate.setAllocationDate(new Date(parsedDate.getTime()));
+            System.out.println("You entered the date: " + allocate.getAllocationDate());
+        } 
+        catch (ParseException e) {
+            System.err.println("Invalid date format. Please enter the date in the format yyyy-MM-dd.");
+            return null; 
+        }
+		
+		return allocate;
+	}
+	public static AssetAllocation deallocateAssetData()
+	{
+		AssetAllocation  deallocate=new AssetAllocation();
+		System.out.println("Enter Return  Date=");
+		String inputDate = scanner.next(); 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            java.util.Date parsedDate = formatter.parse(inputDate);
+            
+            deallocate.setReturnDate(new Date(parsedDate.getTime()));
+            System.out.println("You entered the date: " + deallocate.getReturnDate());
+        } 
+        catch (ParseException e) {
+            System.err.println("Invalid date format. Please enter the date in the format yyyy-MM-dd.");
+            return null; 
+        }
+		
+		return deallocate;
+		
+		
+	}
+	public static Reservations withdrawReservationData()
+	{
+		Reservations  reserve=new Reservations();
+		System.out.println("Enter ReservationID=");
+		reserve.setReservationId(scanner.nextInt());
+		
+		return reserve;
+	}
+	
+	
+}
+

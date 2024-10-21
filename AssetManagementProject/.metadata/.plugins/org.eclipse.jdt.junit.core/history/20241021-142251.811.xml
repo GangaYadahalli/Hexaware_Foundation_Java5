@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="AssetManagementServiceImplTest" project="AssetMangement" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="com.hexaware.ams.test.AssetManagementServiceImplTest" time="0.12" displayname="AssetManagementServiceImplTest" uniqueid="[engine:junit-jupiter]/[class:com.hexaware.ams.test.AssetManagementServiceImplTest]">
+    <testcase name="testAddAsset" classname="com.hexaware.ams.test.AssetManagementServiceImplTest" time="0.12" displayname="testAddAsset()" uniqueid="[engine:junit-jupiter]/[class:com.hexaware.ams.test.AssetManagementServiceImplTest]/[method:testAddAsset()]"/>
+  </testsuite>
+</testrun>

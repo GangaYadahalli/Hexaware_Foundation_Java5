@@ -1,0 +1,30 @@
+package com.hexaware.ams.service;
+
+import java.sql.Date;
+import java.util.List;
+
+import com.hexaware.ams.entity.Assets;
+import com.hexaware.ams.entity.MaintenanceRecords;
+import com.hexaware.ams.entity.Reservations;
+import com.hexaware.ams.exception.AssetNotFoundException;
+
+
+public interface IAssetMangementService {
+	
+	boolean addAsset(Assets asset);
+	
+	boolean updateAsset(Assets asset);
+	
+	 boolean deleteAsset(int assetId);
+	 
+	 boolean allocateAsset(int assetId, int employeeId, Date allocationDate)throws AssetNotFoundException;
+	 
+	 boolean deallocateAsset(int assetId, int employeeId, Date returnDate)throws AssetNotFoundException;
+	 
+	 List<MaintenanceRecords>  performMaintenance(int assetId, Date maintenanceDate,String description, double cost)throws AssetNotFoundException;
+
+	 List<Reservations> reserveAsset(int assetId, int employeeId, Date reservationDate, Date startDate, Date endDate);
+
+	 boolean withdrawReservation(int reservationId);
+ 
+}

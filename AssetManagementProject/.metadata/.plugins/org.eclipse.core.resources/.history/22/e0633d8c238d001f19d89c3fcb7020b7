@@ -1,0 +1,29 @@
+package com.hexaware.ams.service;
+
+import java.sql.Date;
+import java.util.List;
+
+import com.hexaware.ams.entity.Assets;
+import com.hexaware.ams.entity.MaintenanceRecords;
+import com.hexaware.ams.entity.Reservations;
+
+
+public interface IAssetMangementService {
+	
+	boolean addAsset(Assets asset);
+	
+	boolean updateAsset(Assets asset);
+	
+	 boolean deleteAsset(int assetId);
+	 
+	 boolean allocateAsset(int assetId, int employeeId, Date allocationDate);
+	 
+	 boolean deallocateAsset(int assetId, int employeeId, Date returnDate);
+	 
+	 List<MaintenanceRecords>  performMaintenance(int assetId, Date maintenanceDate,String description, double cost);
+
+	 List<Reservations> reserveAsset(int assetId, int employeeId, Date reservationDate, Date startDate, Date endDate);
+
+	 boolean withdrawReservation(int reservationId);
+ 
+}

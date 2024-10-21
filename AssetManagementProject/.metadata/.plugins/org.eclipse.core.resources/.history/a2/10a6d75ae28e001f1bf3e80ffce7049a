@@ -1,0 +1,10 @@
+package com.hexaware.ams.exception;
+
+public class AssetNotFoundException extends RuntimeException {
+
+	public AssetNotFoundException(String string) {
+		super(string); 
+	}
+	
+
+}

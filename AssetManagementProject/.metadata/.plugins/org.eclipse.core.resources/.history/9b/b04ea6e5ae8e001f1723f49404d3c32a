@@ -1,0 +1,109 @@
+package com.hexaware.ams.test;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import com.hexaware.ams.entity.*;
+import com.hexaware.ams.exception.AssetNotFoundException;
+import com.hexaware.ams.service.AssetManagementServiceImpl;
+import com.hexaware.ams.service.IAssetManagementService;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+class AssetManagementServiceImplTest {
+	static IAssetManagementService service;
+	@BeforeAll  
+	public static void beforeAll() {
+		
+		service = new AssetManagementServiceImpl();
+		
+	}
+	
+//	@Test
+//	void testAddAsset() {
+//		long millis = new GregorianCalendar(2023, Calendar.MARCH, 10).getTimeInMillis();
+//	    java.util.Date hardCodedDate = new java.util.Date(millis);
+//
+//	    // Create the asset object
+//	    Assets asset = new Assets(27, "chair", "Furniture", 1027, (java.sql.Date) hardCodedDate, "Office", "inuse", 103);
+//
+//	    // Call the service method to add the asset
+//	    boolean count = service.addAsset(asset);
+//
+//	    // Assert that the asset was added successfully
+//	    assertTrue(count, "The asset should be added successfully");
+//		LocalDate localDate = LocalDate.of(2023, 3, 10);
+//
+//	    java.util.Date hardCodedDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//
+//	   
+//	    Assets asset = new Assets(24, "chair", "Furniture", 1024,Date(hardCodedDate), "Office", "in use", 102);
+//
+//	    boolean count = service.addAsset(asset);
+//
+//	    
+//	    assertTrue(count, "The asset should be added successfully");
+
+		
+	}
+	private Date Date(java.util.Date hardCodedDate) {
+		
+		return null;
+	}
+
+//	@Test
+//	void testPerformMaintenance()
+//	{
+//		
+//		LocalDate localDate = LocalDate.of(2024, 10, 10);
+//		java.util.Date hardCodedDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//		boolean count=service.performMaintenance(8,Date(hardCodedDate), "DeskRepair",3000.0);
+//		
+//		assertTrue(count,"The maintenanceRecords should be added successfully");
+//	}
+//	@Test
+//	void testReserveAsset()
+//	{
+//		LocalDate localDate = LocalDate.of(2024, 10, 10);
+//		java.util.Date hardCodedDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//		boolean count=service.reserveAsset(0, 0, null, null, null, null);
+//		
+//		assertTrue(count,"The reservation should be added successfully");
+//		
+//	}
+	@Test
+	void testDeleteAsset()
+	{
+		 Assets assetService = new Assets();
+	        int assetId = 999; // Assuming this asset ID does not exist
+
+	        boolean exceptionThrown = false;
+	        try {
+	        	 boolean count = service.deleteAsset(assetId);
+	            
+	        } catch (AssetNotFoundException e) {
+	            exceptionThrown = true;
+	            assertEquals("Asset with ID 999 not found.", e.getMessage());
+	        }
+
+	        assertTrue(exceptionThrown, "AssetNotFoundException should be thrown for non-existent asset ID");
+	    }
+
+	}
+
+
+
+

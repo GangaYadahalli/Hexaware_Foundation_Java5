@@ -1,0 +1,229 @@
+package com.hexaware.ams.dao;
+
+import java.sql.Connection;
+
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hexaware.ams.entity.AssetAllocation;
+import com.hexaware.ams.entity.Assets;
+import com.hexaware.ams.entity.MaintenanceRecords;
+import com.hexaware.ams.entity.Reservations;
+import com.mysql.cj.xdevapi.Statement;
+
+public class AssetManagementDaoImpl implements IAssetManagementDao{
+	
+    Connection conn;
+	
+	public AssetManagementDaoImpl()
+	{
+		conn=DBUtil.getDBConnection();
+	}
+	
+
+	@Override
+	public boolean addAsset(Assets asset) {
+		int  count=0;
+		String insert="insert into Assets (assetId, name, type, serialNumber,purchaseDate, location ,status,ownerId) values(?,?,?,?,?,?,?,?)";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(insert);
+			
+			pstmt.setInt(1,asset.getAssetId());
+			pstmt.setString(2, asset.getName());
+			pstmt.setString(3, asset.getType());
+			pstmt.setInt(4,asset.getSerialNumber());
+			pstmt.setDate(5, asset.getPurchaseDate());
+			pstmt.setString(6,asset.getLocation());
+			pstmt.setString(7,asset.getStatus());
+			pstmt.setInt(8, asset.getOwnerId());
+			
+			
+			count=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean updateAsset(Assets asset) {
+		int count=0;
+		String update="update Assets set name=? where assetId=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(update);
+			pstmt.setString(1, asset.getName());
+			pstmt.setInt(2,asset.getAssetId());
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean deleteAsset(int assetId) {
+		
+		int count=0;
+		String delete="delete from Assets where assetId=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(delete);
+			
+			pstmt.setInt(1,assetId);
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+		
+	}
+
+	@Override
+	public boolean allocateAsset(int assetId, int employeeId, Date allocationDate) {
+		
+		int  count=0;
+		String  allocate="insert into AssetAllocation (assetId,employeeId,allocationDate) values(?,?,?)";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(allocate);
+			
+			pstmt.setInt(1,assetId);
+			pstmt.setInt(2, employeeId);
+			pstmt.setDate(3, allocationDate);
+		
+			
+			
+			count=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean deallocateAsset(int assetId, int employeeId, Date returnDate) {
+		
+		int count=0;
+		String deallocate="delete from AssetAllocation where returnDate=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(deallocate);
+			
+			pstmt.setDate(1,returnDate);
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+	}
+
+	@Override
+	public boolean withdrawReservation(int reservationId) {
+		int count=0;
+		String withdraw="delete from reservations where reservationId=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(withdraw);
+			
+			pstmt.setInt(1,reservationId);
+			
+			count=pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		boolean result = (count != 0); 
+		return result;
+		
+		
+	}
+
+
+	@Override
+	public boolean performMaintenance(int assetId, Date maintenanceDate, String description, double cost) {
+		
+		return false;
+	}
+
+
+	@Override
+	public boolean reserveAsset(int assetId, int employeeId, Date reservationDate, Date startDate, Date endDate,
+			String status) {
+		
+		return false;
+	}
+
+//
+//	@Override
+//	public List<MaintenanceRecords> performMaintenance(int assetId, Date maintenanceDate, String description,
+//			double cost) {
+//		List<MaintenanceRecords> records = new ArrayList<>();
+//        String query = "SELECT assetId,maintenanceId,maintenanceDate,description,cost FROM MaintenanceRecords WHERE assetId = ?";
+//
+//        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+//            pstmt.setInt(1, assetId);
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            while (rs.next()) {
+//                
+//                MaintenanceRecords records1 = new MaintenanceRecords(
+//                        rs.getInt("maintenanceId"),
+//                        rs.getInt("assetId"),
+//                        rs.getDate("maintenanceDate"),
+//                        rs.getString("description"),
+//                        rs.getDouble("cost")
+//                );
+//                records.add(records1);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }return records; 
+//    }
+//
+//
+//	@Override
+//	public List<Reservations> reserveAsset(int assetId, int employeeId, Date reservationDate, Date startDate,
+//			Date endDate) {
+//		List<Reservations> reserve = new ArrayList<>();
+//        String query = "SELECT  reservationId,assetId,employeeId,reservationDate,startDate,endDate,status FROM Reservations WHERE employeeId = ?";
+//
+//        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+//            pstmt.setInt(1, employeeId);
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            while (rs.next()) {
+//                
+//                Reservations reserve1 = new Reservations(
+//                        rs.getInt("reservationId"),
+//                        rs.getInt("assetId"),
+//                        rs.getInt("employeeId"),
+//                        rs.getDate("reservationDate"),
+//                        rs.getDate("startDate"),
+//                        rs.getDate("endDate"),
+//                        rs.getString("status")
+//                        
+//                );
+//                reserve.add(reserve1);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }return reserve; 
+//    }
+}

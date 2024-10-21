@@ -1,0 +1,120 @@
+package com.hexaware.ams.service;
+
+import java.sql.Date;
+import java.util.List;
+
+import com.hexaware.ams.dao.AssetMangementDaoImpl;
+import com.hexaware.ams.dao.IAssetMangementDao;
+import com.hexaware.ams.entity.AssetAllocation;
+import com.hexaware.ams.entity.Assets;
+import com.hexaware.ams.entity.MaintenanceRecords;
+import com.hexaware.ams.entity.Reservations;
+
+public class AssetManagementServiceImpl implements IAssetMangementService {
+
+	private IAssetMangementDao dao;
+	public AssetManagementServiceImpl()
+	{
+		dao=new AssetMangementDaoImpl();
+		
+	}
+	@Override
+	public boolean addAsset(Assets asset) {
+		// TODO Auto-generated method stub
+		return  dao.addAsset(asset);
+	}
+
+	@Override
+	public boolean updateAsset(Assets asset) {
+		
+		return dao.updateAsset(asset);
+	}
+
+	@Override
+	public boolean deleteAsset(int assetId) {
+		
+		return dao.deleteAsset(assetId);
+	}
+
+	@Override
+	public boolean allocateAsset(int assetId, int employeeId, Date allocationDate) {
+		
+		return dao.allocateAsset(assetId, employeeId, allocationDate);
+	}
+
+	@Override
+	public boolean deallocateAsset(int assetId, int employeeId, Date returnDate) {
+		
+		return dao.deallocateAsset(assetId,employeeId,returnDate);
+	}
+
+	@Override
+	public boolean withdrawReservation(int reservationId) {
+	
+		return dao.withdrawReservation(reservationId);
+	}
+	
+public static boolean validateAsset(Assets  asset) {
+		
+		
+		boolean flag=false;
+		
+		if(asset.getAssetId()>0 && asset.getName().length()>3 && asset.getType().length()>3 && asset.getSerialNumber()>1000 && asset.getOwnerId()>100) {
+			
+			flag=true;
+		}
+		return flag;
+	}
+
+
+public static boolean validateAssetUpdate(Assets  asset) {
+boolean flag=false;
+
+if(asset.getAssetId()>0 && asset.getName().length()>3 ) {
+	
+	flag=true;
+}
+return flag;
+}
+public static boolean validateAssetDelete(Assets  asset) {
+boolean flag=false;
+
+if(asset.getAssetId()>0 ) {
+	
+	flag=true;
+}
+return flag;
+}
+public static boolean validateAssetAllocation(AssetAllocation allocate) {
+boolean flag=false;
+
+if(allocate.getAssetId()>0 && allocate.getEmployeeId()> 100) {
+	
+	flag=true;
+}
+return flag;
+}
+public static boolean validateWithdrawReservation(Reservations reservations) {
+boolean flag=false;
+
+if(reservations.getReservationId() >20000) {
+	
+	flag=true;
+}
+return flag;
+}
+@Override
+public List<MaintenanceRecords> performMaintenance(int assetId, Date maintenanceDate, String description, double cost) {
+	
+	return dao.performMaintenance(assetId, maintenanceDate, description, cost);
+}
+@Override
+public List<Reservations> reserveAsset(int assetId, int employeeId, String reservationDate, String startDate,
+		String endDate) {
+	
+	return null;
+}
+
+
+
+}

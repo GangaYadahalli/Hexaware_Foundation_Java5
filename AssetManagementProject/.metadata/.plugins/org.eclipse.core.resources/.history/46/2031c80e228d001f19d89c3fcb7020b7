@@ -1,0 +1,5 @@
+driver.classname =  com.mysql.cj.jdbc.Driver
+url =   jdbc:mysql://localhost:3306/digita_asset
+
+user = root
+password = Ganga@422002!
